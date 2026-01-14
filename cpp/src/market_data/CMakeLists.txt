@@ -3,10 +3,11 @@ add_library(market_data OBJECT
     bar_aggregator.cpp
     replay_feed.cpp
     redis_publisher.cpp
-    # Provider implementations (TODO)
-    # providers/darwinex_feed.cpp
-    # providers/mt5_feed.cpp
-    # providers/ib_feed.cpp
+    # Provider implementations
+    providers/csv_feed.cpp
+    # providers/darwinex_feed.cpp  # TODO
+    # providers/mt5_feed.cpp  # TODO
+    # providers/ib_feed.cpp  # TODO
 )
 
 target_include_directories(market_data PUBLIC

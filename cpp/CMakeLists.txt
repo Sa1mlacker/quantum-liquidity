@@ -63,6 +63,12 @@ target_link_libraries(quantumliquidity_core
 # Executables
 add_subdirectory(apps)
 
+# Examples
+option(BUILD_EXAMPLES "Build example programs" ON)
+if(BUILD_EXAMPLES)
+    add_subdirectory(examples)
+endif()
+
 # Tests
 option(BUILD_TESTS "Build unit tests" ON)
 if(BUILD_TESTS)
