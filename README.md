@@ -55,9 +55,18 @@ PostgreSQL pool, Redis pub/sub, Logging, Configuration
 **Phase 2: Market Data Gateway (COMPLETE)** ✅
 Bar aggregation, Feed manager, CSV replay, OANDA live streaming
 
-**Overall Progress**: ~30% (Phases 1-2 of 8)
+**Phase 3: Execution & Risk (COMPLETE)** ✅
+Position Manager, Risk Manager, Execution Engine, Mock Broker, 25+ tests
 
-See [PROGRESS.md](PROGRESS.md) for details.
+**Phase 4: REST API Layer (COMPLETE)** ✅
+FastAPI with MessagePack, Redis caching, WebSocket streaming, 25+ endpoints
+
+**Phase 5: Desktop App (IN PROGRESS)** 🚧
+Tauri + React, TradingView charts, Real-time dashboard
+
+**Overall Progress**: ~60% (Phases 1-4 of 8)
+
+See [docs/](docs/) for phase details.
 
 ## Live Market Data
 

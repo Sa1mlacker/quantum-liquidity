@@ -1,0 +1,35 @@
+{
+  "name": "quantumliquidity-desktop",
+  "version": "1.0.0",
+  "description": "QuantumLiquidity Trading Desktop App",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "tauri": "tauri",
+    "tauri:dev": "tauri dev",
+    "tauri:build": "tauri build"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "^1.5.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.20.0",
+    "lightweight-charts": "^4.1.0",
+    "msgpack-lite": "^0.1.26",
+    "zustand": "^4.4.7",
+    "react-window": "^1.8.10",
+    "date-fns": "^3.0.0"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^1.5.0",
+    "@types/react": "^18.2.43",
+    "@types/react-dom": "^18.2.17",
+    "@types/react-window": "^1.8.8",
+    "@types/msgpack-lite": "^0.1.10",
+    "@vitejs/plugin-react": "^4.2.1",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.8"
+  }
+}
