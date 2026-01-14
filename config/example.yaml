@@ -1,0 +1,153 @@
+# QuantumLiquidity Configuration Example
+
+environment: development  # development, staging, production
+
+# Database configuration
+database:
+  host: localhost
+  port: 5432
+  database: quantumliquidity
+  user: quantumliquidity
+  password: changeme
+  pool_size: 20
+  max_overflow: 40
+
+# Redis configuration
+redis:
+  host: localhost
+  port: 6379
+  db: 0
+  password: null
+  decode_responses: true
+
+# Risk management
+risk:
+  max_position_value_per_instrument: 100000.0  # USD
+  max_total_exposure: 500000.0  # USD
+  max_daily_loss: 10000.0  # USD - kill switch activates
+  max_drawdown_from_peak: 50000.0  # USD
+  max_orders_per_minute: 60
+  max_orders_per_hour: 500
+  max_leverage: 10.0
+
+  # Per-instrument position limits (optional overrides)
+  per_instrument_limits:
+    EURUSD: 200000.0
+    XAUUSD: 50000.0
+    DAX: 100000.0
+
+# Logging
+log_level: INFO  # TRACE, DEBUG, INFO, WARNING, ERROR, CRITICAL
+log_file: null  # null = console only, or path to file
+
+# Market data feeds
+market_data:
+  providers:
+    - name: darwinex
+      enabled: false
+      api_key: YOUR_API_KEY
+      api_secret: YOUR_API_SECRET
+      instruments:
+        - EURUSD
+        - GBPUSD
+        - XAUUSD
+
+    - name: ic_markets
+      enabled: false
+      mt5_login: YOUR_LOGIN
+      mt5_password: YOUR_PASSWORD
+      mt5_server: ICMarkets-Demo
+      instruments:
+        - EURUSD
+        - USDJPY
+        - DAX
+
+  # Market replay settings (for backtesting)
+  replay:
+    enabled: false
+    start_date: "2024-01-01"
+    end_date: "2024-12-31"
+    speed_multiplier: 1.0  # 1.0 = real-time, 10.0 = 10x speed
+
+# Strategies
+strategies:
+  - id: orb_dax
+    type: orb_breakout
+    enabled: true
+    mode: paper  # paper, live
+    instruments:
+      - DAX
+    parameters:
+      or_period_minutes: 30
+      entry_method: retest  # immediate, retest, confirmation
+      stop_multiplier: 1.0  # OR size multiplier
+      target_r_multiple: 2.5
+      max_position_size: 2  # contracts
+      min_volatility_filter: true  # Skip low volatility days
+      sentiment_filter: true  # Block trades against sentiment
+
+  - id: mean_reversion_gold
+    type: mean_reversion
+    enabled: true
+    mode: paper
+    instruments:
+      - XAUUSD
+    parameters:
+      lookback_bars: 20
+      entry_threshold: 2.0  # Bollinger band std dev
+      profit_target_pct: 0.5
+      stop_loss_pct: 0.25
+      only_on_range_days: true
+
+# Analytics engine
+analytics:
+  day_classifier:
+    lookback_days: 60
+    timeframe: 15m  # Bars to use for classification
+
+  orb_analyzer:
+    or_period_minutes: 30
+    lookback_days: 90
+
+  session_analyzer:
+    sessions:
+      asia:
+        start: "00:00"
+        end: "09:00"
+        timezone: UTC
+      london:
+        start: "08:00"
+        end: "16:00"
+        timezone: UTC
+      ny:
+        start: "13:00"
+        end: "21:00"
+        timezone: UTC
+
+# Sentiment engine
+sentiment:
+  enabled: true
+  llm_provider: openai  # openai, anthropic
+  llm_api_key: YOUR_LLM_API_KEY
+  llm_model: gpt-4-turbo
+
+  news_sources:
+    - type: rss
+      url: https://www.forexfactory.com/rss
+      enabled: true
+
+    - type: economic_calendar
+      provider: investing.com
+      enabled: true
+
+  update_interval_minutes: 5
+  sentiment_window_hours: 24
+
+# Monitoring API
+api:
+  host: 0.0.0.0
+  port: 8000
+  cors_origins:
+    - http://localhost:3000
+  enable_docs: true  # Swagger UI
+  auth_enabled: false  # Enable JWT auth in production

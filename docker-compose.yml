@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  # PostgreSQL with TimescaleDB
+  postgres:
+    image: timescale/timescaledb:latest-pg16
+    container_name: marketecho-postgres
+    environment:
+      POSTGRES_DB: marketecho
+      POSTGRES_USER: marketecho
+      POSTGRES_PASSWORD: changeme
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
+    networks:
+      - marketecho
+
+  # Redis
+  redis:
+    image: redis:7-alpine
+    container_name: marketecho-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - marketecho
+
+  # Adminer (DB admin UI)
+  adminer:
+    image: adminer:latest
+    container_name: marketecho-adminer
+    ports:
+      - "8080:8080"
+    networks:
+      - marketecho
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  marketecho:
+    driver: bridge
