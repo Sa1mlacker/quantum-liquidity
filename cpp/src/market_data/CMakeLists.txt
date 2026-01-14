@@ -5,6 +5,7 @@ add_library(market_data OBJECT
     redis_publisher.cpp
     # Provider implementations
     providers/csv_feed.cpp
+    providers/oanda_feed.cpp
     # providers/darwinex_feed.cpp  # TODO
     # providers/mt5_feed.cpp  # TODO
     # providers/ib_feed.cpp  # TODO

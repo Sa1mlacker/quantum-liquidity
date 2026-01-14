@@ -49,12 +49,34 @@ cp .env.example .env
 
 ## Current Status
 
-**Phase 1: Foundation (COMPLETE)** ✅  
+**Phase 1: Foundation (COMPLETE)** ✅
 PostgreSQL pool, Redis pub/sub, Logging, Configuration
 
-**Overall Progress**: ~20% (Phase 1 of 8)
+**Phase 2: Market Data Gateway (COMPLETE)** ✅
+Bar aggregation, Feed manager, CSV replay, OANDA live streaming
+
+**Overall Progress**: ~30% (Phases 1-2 of 8)
 
 See [PROGRESS.md](PROGRESS.md) for details.
+
+## Live Market Data
+
+Stream real-time FX data from OANDA in 5 minutes:
+
+```bash
+# 1. Get free OANDA demo account
+open https://www.oanda.com/register/
+
+# 2. Set credentials
+export OANDA_API_TOKEN="your-token"
+export OANDA_ACCOUNT_ID="your-account-id"
+
+# 3. Run
+cd cpp/build
+./examples/oanda_live_example
+```
+
+**[📖 Full Live Data Guide](docs/QUICK_START_LIVE_DATA.md)**
 
 ## Documentation
 
