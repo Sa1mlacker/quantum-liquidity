@@ -1,0 +1,38 @@
+# QuantumLiquidity Python API Requirements
+# Optimized for low memory/CPU usage
+
+# Core Framework
+fastapi==0.104.1              # Lean async web framework
+uvicorn[standard]==0.24.0     # Fast ASGI server with uvloop
+pydantic==2.5.0               # Efficient validation/serialization
+pydantic-settings==2.1.0      # Environment config
+
+# Database
+asyncpg==0.29.0               # Async PostgreSQL driver (fastest)
+sqlalchemy[asyncio]==2.0.23   # Async ORM
+psycopg2-binary==2.9.9        # Sync fallback
+
+# Caching & Messaging
+redis==5.0.1                  # Redis client
+aioredis==2.0.1               # Async Redis (deprecated but stable)
+
+# Binary Serialization (Optimization)
+msgpack==1.0.7                # Binary protocol (10x smaller than JSON)
+orjson==3.9.10                # Fast JSON (fallback, 2x faster than stdlib)
+
+# WebSocket
+python-socketio==5.10.0       # Socket.IO for WebSocket
+aiofiles==23.2.1              # Async file operations
+
+# Monitoring & Logging
+prometheus-client==0.19.0     # Metrics export
+python-json-logger==2.0.7     # Structured logging
+
+# Utils
+python-dateutil==2.8.2        # Date parsing
+pytz==2023.3                  # Timezone support
+
+# Development
+pytest==7.4.3
+pytest-asyncio==0.21.1
+httpx==0.25.2                 # Async HTTP client for tests

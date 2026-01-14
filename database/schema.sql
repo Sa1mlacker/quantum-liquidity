@@ -187,51 +187,84 @@ CREATE TABLE IF NOT EXISTS orders (
     quantity NUMERIC(20, 4) NOT NULL,
     limit_price NUMERIC(20, 8),
     stop_price NUMERIC(20, 8),
-    time_in_force VARCHAR(8) DEFAULT 'GTC',
-    state VARCHAR(32) NOT NULL,  -- PENDING_SUBMIT, SUBMITTED, ACCEPTED, FILLED, etc.
+    time_in_force VARCHAR(8) DEFAULT 'GTC',  -- DAY, GTC, IOC, FOK
+    status VARCHAR(32) NOT NULL,  -- PENDING, SUBMITTED, ACKNOWLEDGED, PARTIALLY_FILLED, FILLED, CANCELLED, REJECTED, ERROR, EXPIRED
     filled_quantity NUMERIC(20, 4) DEFAULT 0,
     remaining_quantity NUMERIC(20, 4),
     average_fill_price NUMERIC(20, 8),
     reject_reason TEXT,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW(),
-    exchange_order_id VARCHAR(128)
+    submitted_at TIMESTAMPTZ,
+    filled_at TIMESTAMPTZ,
+    exchange_order_id VARCHAR(128),
+    provider VARCHAR(64),  -- Execution provider name (OANDA, InteractiveBrokers, etc.)
+    user_comment TEXT
 );
 
 CREATE INDEX IF NOT EXISTS idx_orders_strategy ON orders(strategy_id, created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_orders_instrument ON orders(instrument, created_at DESC);
-CREATE INDEX IF NOT EXISTS idx_orders_state ON orders(state, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_orders_status ON orders(status, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_orders_provider ON orders(provider, created_at DESC);
 
 -- Trades (fills)
 CREATE TABLE IF NOT EXISTS trades (
     trade_id BIGSERIAL PRIMARY KEY,
+    fill_id VARCHAR(128) UNIQUE NOT NULL,  -- Unique fill identifier from provider
     order_id BIGINT NOT NULL REFERENCES orders(order_id),
-    execution_id VARCHAR(128),
+    client_order_id VARCHAR(64) NOT NULL,  -- Reference to client order ID
+    execution_id VARCHAR(128),  -- Exchange-specific execution ID
     timestamp TIMESTAMPTZ NOT NULL,
     instrument VARCHAR(32) NOT NULL,
-    side VARCHAR(8) NOT NULL,
+    side VARCHAR(8) NOT NULL,  -- BUY, SELL
     quantity NUMERIC(20, 4) NOT NULL,
     price NUMERIC(20, 8) NOT NULL,
-    commission NUMERIC(20, 8),
+    commission NUMERIC(20, 8) DEFAULT 0,
     pnl NUMERIC(20, 8),  -- Realized P&L for this trade
+    provider VARCHAR(64),  -- Execution provider
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
 CREATE INDEX IF NOT EXISTS idx_trades_order ON trades(order_id);
+CREATE INDEX IF NOT EXISTS idx_trades_client_order ON trades(client_order_id);
 CREATE INDEX IF NOT EXISTS idx_trades_timestamp ON trades(timestamp DESC);
+CREATE INDEX IF NOT EXISTS idx_trades_instrument ON trades(instrument, timestamp DESC);
 
 -- Positions (snapshots)
 CREATE TABLE IF NOT EXISTS positions (
     timestamp TIMESTAMPTZ NOT NULL,
     instrument VARCHAR(32) NOT NULL,
-    quantity NUMERIC(20, 4) NOT NULL,
-    average_price NUMERIC(20, 8) NOT NULL,
+    quantity NUMERIC(20, 4) NOT NULL,  -- Signed: positive = long, negative = short
+    entry_price NUMERIC(20, 8) NOT NULL,  -- Weighted average entry price
     unrealized_pnl NUMERIC(20, 8),
-    realized_pnl NUMERIC(20, 8),
+    realized_pnl NUMERIC(20, 8),  -- Today's realized PnL
+    num_fills_today INTEGER DEFAULT 0,
+    total_commission NUMERIC(20, 8) DEFAULT 0,
+    last_update_ns BIGINT,  -- Nanosecond timestamp of last update
     PRIMARY KEY (timestamp, instrument)
 );
 
 SELECT create_hypertable('positions', 'timestamp', if_not_exists => TRUE);
+
+-- Risk metrics (snapshots)
+CREATE TABLE IF NOT EXISTS risk_metrics (
+    timestamp TIMESTAMPTZ NOT NULL PRIMARY KEY,
+    total_exposure NUMERIC(20, 8),  -- Sum of |qty * price|
+    account_utilization NUMERIC(5, 4),  -- % of bankroll used
+    daily_pnl NUMERIC(20, 8),  -- Total PnL today
+    realized_pnl NUMERIC(20, 8),  -- Closed trades
+    unrealized_pnl NUMERIC(20, 8),  -- Open positions
+    max_dd_today NUMERIC(20, 8),  -- Max drawdown from daily high
+    daily_high_pnl NUMERIC(20, 8),  -- Highest PnL today
+    orders_submitted_today INTEGER,
+    orders_filled_today INTEGER,
+    orders_rejected_today INTEGER,
+    orders_cancelled_today INTEGER,
+    halt_active BOOLEAN DEFAULT FALSE,
+    halt_reason TEXT
+);
+
+SELECT create_hypertable('risk_metrics', 'timestamp', if_not_exists => TRUE);
 
 -- Strategy performance metrics
 CREATE TABLE IF NOT EXISTS strategy_metrics (
@@ -301,7 +334,7 @@ ORDER BY instrument, timestamp DESC;
 CREATE OR REPLACE VIEW active_orders AS
 SELECT *
 FROM orders
-WHERE state IN ('PENDING_SUBMIT', 'SUBMITTED', 'ACCEPTED', 'PARTIALLY_FILLED')
+WHERE status IN ('PENDING', 'SUBMITTED', 'ACKNOWLEDGED', 'PARTIALLY_FILLED')
 ORDER BY created_at DESC;
 
 -- Daily P&L view
