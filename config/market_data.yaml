@@ -1,0 +1,106 @@
+# Market Data Configuration
+# All feeds and instruments configured here will be automatically loaded
+
+feeds:
+  # OANDA - FX pairs
+  - name: oanda_fx
+    type: oanda
+    enabled: true
+    credentials:
+      api_token: ${OANDA_API_TOKEN}  # From environment
+      account_id: ${OANDA_ACCOUNT_ID}
+      use_practice: true
+    
+    instruments:
+      # Major pairs
+      - EUR/USD
+      - GBP/USD
+      - USD/JPY
+      - AUD/USD
+      - USD/CHF
+      - USD/CAD
+      - NZD/USD
+      
+      # Minor pairs
+      - EUR/GBP
+      - EUR/JPY
+      - GBP/JPY
+      - EUR/CHF
+      - EUR/AUD
+      - AUD/JPY
+      
+      # Exotic pairs (optional)
+      # - USD/TRY
+      # - USD/ZAR
+      # - USD/MXN
+
+  # Polygon.io - US Stocks + Crypto (requires API key)
+  - name: polygon_stocks
+    type: polygon
+    enabled: false  # Set to true when you have API key
+    credentials:
+      api_key: ${POLYGON_API_KEY}
+    
+    instruments:
+      # Tech stocks
+      - AAPL
+      - GOOGL
+      - MSFT
+      - TSLA
+      - NVDA
+      
+      # Crypto
+      - X:BTCUSD
+      - X:ETHUSD
+
+  # Alpha Vantage - Global stocks + FX + Crypto (free tier available)
+  - name: alphavantage
+    type: alphavantage
+    enabled: false
+    credentials:
+      api_key: ${ALPHAVANTAGE_API_KEY}  # Free: https://www.alphavantage.co/support/#api-key
+    
+    instruments:
+      - EUR/USD
+      - GBP/USD
+      - IBM
+      - AAPL
+
+# Bar aggregation settings
+aggregation:
+  enabled: true
+  timeframes:
+    - 1m   # 1 minute
+    - 5m   # 5 minutes
+    - 15m  # 15 minutes
+    - 30m  # 30 minutes
+    - 1h   # 1 hour
+    - 4h   # 4 hours
+    - 1d   # 1 day
+
+# Persistence settings
+persistence:
+  database:
+    enabled: true
+    batch_size: 1000
+    flush_interval_ms: 1000
+  
+  redis:
+    enabled: true
+    channels:
+      ticks: market.ticks
+      bars: market.bars
+
+# Auto-reconnection
+reconnection:
+  enabled: true
+  max_attempts: 10
+  backoff_seconds: [1, 2, 5, 10, 30, 60]  # Exponential backoff
+
+# Logging
+logging:
+  level: INFO  # TRACE, DEBUG, INFO, WARNING, ERROR, CRITICAL
+  channels:
+    market_data: INFO
+    orders: INFO
+    risk: WARNING
