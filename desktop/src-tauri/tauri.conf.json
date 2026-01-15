@@ -23,11 +23,7 @@
       "targets": "all",
       "identifier": "com.quantumliquidity.desktop",
     "icon": []        },
-    "macOS": {
-      "signingIdentity": null
-    },
     "windows": [      {
-        "resizable": true,
         "title": "QuantumLiquidity",
         "width": 1600,
         "height": 1000,
