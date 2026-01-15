@@ -61,10 +61,10 @@ Position Manager, Risk Manager, Execution Engine, Mock Broker, 25+ tests
 **Phase 4: REST API Layer (COMPLETE)** ✅
 FastAPI with MessagePack, Redis caching, WebSocket streaming, 25+ endpoints
 
-**Phase 5: Desktop App (IN PROGRESS)** 🚧
-Tauri + React, TradingView charts, Real-time dashboard
+**Phase 5: Desktop App (COMPLETE)** ✅
+Tauri + React + TypeScript, TradingView Lightweight Charts, 3 pages (Dashboard, Positions, Risk), Virtual scrolling
 
-**Overall Progress**: ~60% (Phases 1-4 of 8)
+**Overall Progress**: ~70% (Phases 1-5 of 8)
 
 See [docs/](docs/) for phase details.
 
