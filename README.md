@@ -64,7 +64,10 @@ FastAPI with MessagePack, Redis caching, WebSocket streaming, 25+ endpoints
 **Phase 5: Desktop App (COMPLETE)** ✅
 Tauri + React + TypeScript, TradingView Lightweight Charts, 3 pages (Dashboard, Positions, Risk), Virtual scrolling
 
-**Overall Progress**: ~70% (Phases 1-5 of 8)
+**Phase 6: Analytics & Intelligence (COMPLETE)** ✅
+Day classification (TREND/RANGE/V_DAY/P_DAY), ORB analysis, Win rate & profit factor, REST API integration
+
+**Overall Progress**: ~75% (Phases 1-6 of 8)
 
 See [docs/](docs/) for phase details.
 
