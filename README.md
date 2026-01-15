@@ -67,7 +67,10 @@ Tauri + React + TypeScript, TradingView Lightweight Charts, 3 pages (Dashboard, 
 **Phase 6: Analytics & Intelligence (COMPLETE)** ✅
 Day classification (TREND/RANGE/V_DAY/P_DAY), ORB analysis, Win rate & profit factor, REST API integration
 
-**Overall Progress**: ~75% (Phases 1-6 of 8)
+**Phase 7: Strategy Framework (COMPLETE)** ✅
+Base strategy class, ORB breakout strategy, Strategy manager, REST API control, Performance tracking
+
+**Overall Progress**: ~85% (Phases 1-7 of 8)
 
 See [docs/](docs/) for phase details.
 
