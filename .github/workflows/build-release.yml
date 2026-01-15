@@ -1,0 +1,66 @@
+name: Build macOS Release
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-apple-darwin,x86_64-apple-darwin
+      
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      
+      - name: Install dependencies
+        run: |
+          cd desktop
+          npm install
+      
+      - name: Build Tauri app
+        run: |
+          cd desktop
+          npm run tauri build -- --target universal-apple-darwin
+        env:
+          MACOS_CERTIFICATE: ${{ secrets.MACOS_CERTIFICATE }}
+          MACOS_CERTIFICATE_PWD: ${{ secrets.MACOS_CERTIFICATE_PWD }}
+          CI: true
+      
+      - name: Prepare release assets
+        run: |
+          cd desktop/src-tauri/target/release/bundle/macos
+          zip -r QuantumLiquidity.app.zip QuantumLiquidity.app
+          ls -lh QuantumLiquidity*
+      
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            desktop/src-tauri/target/release/bundle/macos/QuantumLiquidity.app.zip
+            desktop/src-tauri/target/release/bundle/macos/QuantumLiquidity.dmg
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: macos-build
+          path: |
+            desktop/src-tauri/target/release/bundle/macos/QuantumLiquidity.app.zip
+            desktop/src-tauri/target/release/bundle/macos/QuantumLiquidity.dmg
