@@ -1,0 +1,374 @@
+/**
+ * Dark Theme Styles
+ * Professional trading platform aesthetic
+ */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg-primary: #0a0e17;
+  --bg-secondary: #161b22;
+  --bg-tertiary: #21262d;
+  --text-primary: #c9d1d9;
+  --text-secondary: #8b949e;
+  --border: #30363d;
+  --accent: #58a6ff;
+  --success: #26a69a;
+  --danger: #ef5350;
+  --warning: #ff9800;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.app {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Dashboard */
+.dashboard {
+  padding: 20px;
+  overflow-y: auto;
+  height: 100vh;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.dashboard-header h1 {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.status {
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status-active {
+  background: rgba(38, 166, 154, 0.1);
+  color: var(--success);
+}
+
+.status-halted {
+  background: rgba(239, 83, 80, 0.1);
+  color: var(--danger);
+}
+
+/* Metrics Grid */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.metrics-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.metrics-label {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.metrics-value {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.metrics-change {
+  font-size: 12px;
+}
+
+/* Chart Section */
+.chart-section {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 24px;
+}
+
+.chart-section h2 {
+  font-size: 16px;
+  margin-bottom: 12px;
+}
+
+/* Position Table */
+.positions-section {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.positions-section h2 {
+  font-size: 16px;
+  margin-bottom: 12px;
+}
+
+.position-table {
+  width: 100%;
+}
+
+.position-header,
+.position-row {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  padding: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.position-header {
+  font-weight: 600;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.position-row:hover {
+  background: var(--bg-tertiary);
+}
+
+.position-cell {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Trades Table */
+.trades-section {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+  margin-top: 24px;
+}
+
+.trades-section h2 {
+  font-size: 16px;
+  margin-bottom: 12px;
+}
+
+.trades-table {
+  width: 100%;
+}
+
+.trades-header,
+.trade-row {
+  display: grid;
+  grid-template-columns: 100px 120px 60px 60px 80px 80px 80px;
+  gap: 8px;
+  padding: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.trades-header {
+  font-weight: 600;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.trade-row:hover {
+  background: var(--bg-tertiary);
+}
+
+.trade-cell {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Alert Banner */
+.alert-banner {
+  background: rgba(239, 83, 80, 0.1);
+  border: 1px solid var(--danger);
+  border-radius: 8px;
+  padding: 12px;
+  margin-top: 24px;
+  color: var(--danger);
+  font-weight: 600;
+}
+
+/* Risk Page */
+.risk-page {
+  padding: 20px;
+  overflow-y: auto;
+  height: 100vh;
+}
+
+.risk-page header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.timestamp {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.alert-critical {
+  background: rgba(239, 83, 80, 0.1);
+  border: 2px solid var(--danger);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 24px;
+}
+
+.alert-critical h2 {
+  color: var(--danger);
+  margin-bottom: 8px;
+}
+
+.risk-metrics,
+.order-stats,
+.risk-indicators,
+.risk-warnings {
+  margin-bottom: 24px;
+}
+
+.risk-metrics h2,
+.order-stats h2,
+.risk-indicators h2,
+.risk-warnings h2 {
+  font-size: 16px;
+  margin-bottom: 12px;
+}
+
+/* Indicators */
+.indicator-grid {
+  display: grid;
+  gap: 16px;
+}
+
+.indicator {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.indicator-label {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: var(--bg-tertiary);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.progress-fill {
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+.indicator-value {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* Warnings */
+.warning-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+.warning-item.critical {
+  background: rgba(239, 83, 80, 0.1);
+  border: 1px solid var(--danger);
+  color: var(--danger);
+}
+
+.warning-item.high {
+  background: rgba(239, 83, 80, 0.1);
+  border: 1px solid var(--danger);
+  color: var(--danger);
+}
+
+.warning-item.medium {
+  background: rgba(255, 152, 0, 0.1);
+  border: 1px solid var(--warning);
+  color: var(--warning);
+}
+
+.warning-item.ok {
+  background: rgba(38, 166, 154, 0.1);
+  border: 1px solid var(--success);
+  color: var(--success);
+}
+
+.warning-icon {
+  font-size: 20px;
+}
+
+/* Positions Page */
+.positions-page {
+  padding: 20px;
+  overflow-y: auto;
+  height: 100vh;
+}
+
+.positions-page header {
+  margin-bottom: 24px;
+}
+
+.positions-page h1 {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+/* Loading & Empty States */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  font-size: 18px;
+  color: var(--text-secondary);
+}
+
+.empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
