@@ -9,11 +9,26 @@ import MetricsCard from '@/components/MetricsCard'
 import PositionTable from '@/components/PositionTable'
 
 export default function Dashboard() {
-  const { data: summary } = usePositionSummary()
-  const { data: bars } = useBars('ES', '1m', 500)
-  const { data: risk } = useRiskMetrics()
+  const { data: summary, loading: summaryLoading, error: summaryError } = usePositionSummary()
+  const { data: bars, loading: barsLoading, error: barsError } = useBars('ES', '1m', 500)
+  const { data: risk, loading: riskLoading, error: riskError } = useRiskMetrics()
 
-  if (!summary || !bars || !risk) {
+  const hasError = summaryError || barsError || riskError
+  const isLoading = summaryLoading || barsLoading || riskLoading
+
+  if (hasError) {
+    return (
+      <div className="error-screen">
+        <h2>Backend Connection Error</h2>
+        <p>Cannot connect to QuantumLiquidity API server.</p>
+        <p>Please ensure the Python API server is running:</p>
+        <pre>cd python && uvicorn quantumliquidity.api.main:app --reload</pre>
+        <p className="error-details">Error: {(summaryError || barsError || riskError)?.message}</p>
+      </div>
+    )
+  }
+
+  if (isLoading || !summary || !bars || !risk) {
     return <div className="loading">Loading...</div>
   }
 
