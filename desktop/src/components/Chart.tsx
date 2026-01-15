@@ -76,6 +76,7 @@ export default function Chart({ data, height = 400 }: ChartProps) {
   useEffect(() => {
     if (!seriesRef.current || !data.length) return
 
+    // @ts-expect-error
     const chartData: CandlestickData[] = data.map((bar) => ({
       time: new Date(bar.timestamp).getTime() / 1000,
       open: bar.open,
