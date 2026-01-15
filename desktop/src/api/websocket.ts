@@ -4,8 +4,7 @@
  */
 
 import msgpack from 'msgpack-lite'
-import { WSMessage, WSMessageType } from '@/types/api'
-
+import { WSMessage } from '@/types/api'
 const WS_URL = 'ws://localhost:8000/ws/stream'
 
 type MessageHandler = (message: WSMessage) => void
