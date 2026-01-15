@@ -1,4 +1,4 @@
-name: Build macOS Release
+name: Build macOS Release (Using build-app.sh)
 
 on:
   push:
@@ -13,7 +13,8 @@ jobs:
     runs-on: macos-latest
     
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
       
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
@@ -25,42 +26,38 @@ jobs:
         with:
           node-version: '18'
       
-      - name: Install dependencies
+      - name: Install Xcode Command Line Tools
         run: |
-          cd desktop
-          npm install
+          echo "Xcode CLI tools already installed on macos-latest"
+          xcode-select --install 2>/dev/null || true
       
-      - name: Build Tauri app
+      - name: Run build-app.sh
         run: |
-          cd desktop
-          npm run tauri build -- --target universal-apple-darwin
+          bash build-app.sh
         env:
-          MACOS_CERTIFICATE: ${{ secrets.MACOS_CERTIFICATE }}
-          MACOS_CERTIFICATE_PWD: ${{ secrets.MACOS_CERTIFICATE_PWD }}
           CI: true
       
-      - name: Prepare release assets
+      - name: Check build output
         run: |
-          cd desktop/src-tauri/target/release/bundle/macos
-          zip -r QuantumLiquidity.app.zip QuantumLiquidity.app
-          ls -lh QuantumLiquidity*
+          ls -lh desktop/src-tauri/target/release/bundle/macos/ || echo "Build directory not found"
+          find . -name "QuantumLiquidity*" -type f 2>/dev/null | head -20
       
       - name: Create Release
-        uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v1
         with:
           files: |
             desktop/src-tauri/target/release/bundle/macos/QuantumLiquidity.app.zip
-            desktop/src-tauri/target/release/bundle/macos/QuantumLiquidity.dmg
           draft: false
           prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Upload build artifacts
+        if: always()
         uses: actions/upload-artifact@v3
         with:
-          name: macos-build
+          name: macos-build-${{ github.run_number }}
           path: |
-            desktop/src-tauri/target/release/bundle/macos/QuantumLiquidity.app.zip
-            desktop/src-tauri/target/release/bundle/macos/QuantumLiquidity.dmg
+            desktop/src-tauri/target/release/bundle/macos/
+          retention-days: 7
