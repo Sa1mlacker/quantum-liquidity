@@ -15,7 +15,7 @@ QuantumLiquidity is an institutional-grade algorithmic trading platform designed
 - **Event-Driven Architecture**: Microsecond-latency market data processing
 - **Multi-Asset Support**: FX pairs, precious metals, equity indices
 - **Advanced Analytics**: Day type classification, ORB statistics, volume profile analysis
-- **AI Sentiment Engine**: LLM-powered news analysis and sentiment aggregation
+- **AI Sentiment Engine**: News analysis and sentiment aggregation
 - **Professional Risk Management**: Pre-trade checks, position limits, kill-switch
 - **Backtesting**: Historical market replay with configurable speed
 
@@ -49,40 +49,40 @@ cp .env.example .env
 
 ## Current Status
 
-**Phase 1: Foundation (COMPLETE)** ✅
+**Phase 1: Foundation** - COMPLETE
 PostgreSQL pool, Redis pub/sub, Logging, Configuration
 
-**Phase 2: Market Data Gateway (COMPLETE)** ✅
+**Phase 2: Market Data Gateway** - COMPLETE
 Bar aggregation, Feed manager, CSV replay, OANDA live streaming
 
-**Phase 3: Execution & Risk (COMPLETE)** ✅
+**Phase 3: Execution & Risk** - COMPLETE
 Position Manager, Risk Manager, Execution Engine, Mock Broker, 25+ tests
 
-**Phase 4: REST API Layer (COMPLETE)** ✅
+**Phase 4: REST API Layer** - COMPLETE
 FastAPI with MessagePack, Redis caching, WebSocket streaming, 25+ endpoints
 
-**Phase 5: Desktop App (COMPLETE)** ✅
+**Phase 5: Desktop App** - COMPLETE
 Tauri + React + TypeScript, TradingView Lightweight Charts, 3 pages (Dashboard, Positions, Risk), Virtual scrolling
 
-**Phase 6: Analytics & Intelligence (COMPLETE)** ✅
+**Phase 6: Analytics & Intelligence** - COMPLETE
 Day classification (TREND/RANGE/V_DAY/P_DAY), ORB analysis, Win rate & profit factor, REST API integration
 
-**Phase 7: Strategy Framework (COMPLETE)** ✅
+**Phase 7: Strategy Framework** - COMPLETE
 Base strategy class, ORB breakout strategy, Strategy manager, REST API control, Performance tracking
 
-**Phase 8: Sentiment Engine (COMPLETE)** ✅
-LLM-powered news analysis, Multi-source scraping, Real-time sentiment scoring, Alert system
+**Phase 8: Sentiment Engine** - COMPLETE
+News analysis, Multi-source scraping, Real-time sentiment scoring, Alert system
 
-**Overall Progress**: 🎉 **100% COMPLETE** 🎉 (All 8 Phases)
+**Overall Progress**: 100% COMPLETE (All 8 Phases)
 
 See [docs/](docs/) for phase details.
 
 ## Live Market Data
 
-Stream real-time FX data from OANDA in 5 minutes:
+Stream real-time FX data from OANDA:
 
 ```bash
-# 1. Get free OANDA demo account
+# 1. Get OANDA demo account
 open https://www.oanda.com/register/
 
 # 2. Set credentials
@@ -94,7 +94,7 @@ cd cpp/build
 ./examples/oanda_live_example
 ```
 
-**[📖 Full Live Data Guide](docs/QUICK_START_LIVE_DATA.md)**
+Full guide: [docs/QUICK_START_LIVE_DATA.md](docs/QUICK_START_LIVE_DATA.md)
 
 ## Documentation
 

@@ -24,14 +24,7 @@ class InstrumentSentiment:
 
 
 class SentimentAggregator:
-    """
-    Aggregates sentiment across multiple news sources
-
-    Features:
-    - Per-instrument sentiment tracking
-    - Time-weighted aggregation (recent news matters more)
-    - Alert on significant sentiment shifts
-    """
+    """Aggregates sentiment across multiple news sources with time weighting"""
 
     def __init__(
         self,

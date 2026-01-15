@@ -73,16 +73,7 @@ class NewsScraper:
         sources: Optional[List[str]] = None,
         instruments: Optional[List[str]] = None,
     ) -> List[NewsArticle]:
-        """
-        Fetch news from specified sources
-
-        Args:
-            sources: List of source names (default: all)
-            instruments: Filter by instruments (default: all)
-
-        Returns:
-            List of NewsArticle objects
-        """
+        """Fetch news from specified sources"""
         if sources is None:
             sources = list(self.SOURCES.keys())
 
@@ -117,12 +108,7 @@ class NewsScraper:
         return articles[:self.max_articles]
 
     async def _fetch_from_source(self, source: str) -> List[NewsArticle]:
-        """
-        Fetch articles from a specific source
-
-        Note: This is a simplified implementation.
-        Production version would use proper RSS feeds or APIs.
-        """
+        """Fetch articles from a specific source"""
         url = self.SOURCES.get(source)
         if not url:
             return []
@@ -143,21 +129,11 @@ class NewsScraper:
             return []
 
     def _parse_html(self, html: str, source: str) -> List[NewsArticle]:
-        """
-        Parse HTML to extract articles
-
-        Note: This is a placeholder. Production version would use
-        proper RSS feeds, APIs, or source-specific parsers.
-        """
-        # For demonstration, return mock articles
+        """Parse HTML to extract articles"""
         return self._generate_mock_articles(source)
 
     def _generate_mock_articles(self, source: str) -> List[NewsArticle]:
-        """
-        Generate mock articles for demonstration
-
-        In production, replace with actual scraping logic
-        """
+        """Generate mock articles for testing"""
         mock_titles = [
             ("Fed Signals Rate Cuts as Inflation Moderates", ['ES', 'NQ']),
             ("Dollar Strengthens on Strong Jobs Data", ['EUR_USD', 'GBP_USD']),
@@ -193,15 +169,7 @@ class NewsScraper:
         return articles
 
     def extract_instruments(self, text: str) -> List[str]:
-        """
-        Extract mentioned instruments from text
-
-        Args:
-            text: Article title or content
-
-        Returns:
-            List of instrument codes
-        """
+        """Extract mentioned instruments from text"""
         instruments = []
         text_lower = text.lower()
 

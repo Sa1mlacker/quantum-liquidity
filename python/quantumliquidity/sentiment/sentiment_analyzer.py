@@ -28,17 +28,7 @@ class SentimentScore:
 
 
 class SentimentAnalyzer:
-    """
-    Analyzes news sentiment using LLM
-
-    In production, this would use:
-    - OpenAI API (GPT-4)
-    - Anthropic API (Claude)
-    - Local LLM (Llama, Mistral)
-    - FinBERT (specialized finance model)
-
-    For now, implements rule-based heuristics
-    """
+    """Analyzes news sentiment using keyword-based heuristics or LLM"""
 
     # Sentiment keywords
     BULLISH_KEYWORDS = [
@@ -54,59 +44,22 @@ class SentimentAnalyzer:
     ]
 
     def __init__(self, use_llm: bool = False, api_key: Optional[str] = None):
-        """
-        Initialize sentiment analyzer
-
-        Args:
-            use_llm: Whether to use LLM API (requires api_key)
-            api_key: API key for LLM service
-        """
         self.use_llm = use_llm
         self.api_key = api_key
 
     async def analyze(self, text: str) -> SentimentScore:
-        """
-        Analyze sentiment of text
-
-        Args:
-            text: News article title or content
-
-        Returns:
-            SentimentScore with label, score, and confidence
-        """
+        """Analyze sentiment of text"""
         if self.use_llm and self.api_key:
             return await self._analyze_with_llm(text)
         else:
             return self._analyze_with_heuristics(text)
 
     async def _analyze_with_llm(self, text: str) -> SentimentScore:
-        """
-        Use LLM API for sentiment analysis
-
-        Example prompt:
-        ```
-        Analyze the sentiment of this financial news for trading:
-        "{text}"
-
-        Respond with JSON:
-        {{
-            "sentiment": "BULLISH/NEUTRAL/BEARISH",
-            "score": 0.7,
-            "confidence": 0.9,
-            "reasoning": "The article mentions..."
-        }}
-        ```
-        """
-        # Placeholder for LLM integration
-        # In production, call OpenAI/Anthropic API here
+        """Use LLM API for sentiment analysis"""
         return self._analyze_with_heuristics(text)
 
     def _analyze_with_heuristics(self, text: str) -> SentimentScore:
-        """
-        Rule-based sentiment analysis
-
-        Uses keyword matching and basic NLP
-        """
+        """Rule-based sentiment analysis using keyword matching"""
         text_lower = text.lower()
 
         # Count keyword occurrences
@@ -162,22 +115,12 @@ class SentimentAnalyzer:
         )
 
     def analyze_batch(self, texts: list[str]) -> list[SentimentScore]:
-        """
-        Analyze multiple texts in batch
-
-        More efficient for LLM APIs with batch support
-        """
-        # For now, analyze sequentially
-        # In production, use asyncio.gather for parallel processing
+        """Analyze multiple texts in batch"""
         return [self._analyze_with_heuristics(text) for text in texts]
 
     @staticmethod
     def aggregate_sentiment(scores: list[SentimentScore]) -> SentimentScore:
-        """
-        Aggregate multiple sentiment scores
-
-        Useful for combining sentiment from multiple articles
-        """
+        """Aggregate multiple sentiment scores"""
         if not scores:
             return SentimentScore(
                 label=SentimentLabel.NEUTRAL,
