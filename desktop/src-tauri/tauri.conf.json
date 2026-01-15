@@ -22,8 +22,7 @@
       "active": true,
       "targets": "all",
       "identifier": "com.quantumliquidity.desktop",
-      "icon": "icon": []
-    "security": {
+    "icon": [],    "security": {
       "csp": null
     },
     "windows": [
