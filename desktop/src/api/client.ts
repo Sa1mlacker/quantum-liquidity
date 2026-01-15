@@ -3,6 +3,11 @@
  * Handles REST requests to FastAPI backend
  */
 
+import { mockData } from './mockData'
+
+// Enable mock data mode when API is unavailable
+let USE_MOCK_DATA = false
+
 const API_BASE = 'http://localhost:8000/api/v1'
 
 class APIError extends Error {
@@ -42,6 +47,9 @@ async function request<T>(
 
     return await response.json()
   } catch (error) {
+        // Enable mock data mode when API is unavailable
+    USE_MOCK_DATA = true
+    console.warn('API unavailable, switching to mock data mode')
     if (error instanceof APIError) {
       throw error
     }
@@ -57,65 +65,72 @@ export const api = {
   health: () => request('/health'),
 
   // Positions
+    // Health
+  health: async () => {
+    if (USE_MOCK_DATA) return mockData.health
+    return request('/health')
+  },
+
+  // Positions
   positions: {
-    list: () => request('/positions'),
-    summary: () => request('/positions/summary'),
-    get: (instrument: string) => request(`/positions/${instrument}`),
-  },
-
-  // Orders
-  orders: {
-    list: (params?: { limit?: number; offset?: number; status?: string; instrument?: string }) => {
-      const query = new URLSearchParams(params as any).toString()
-      return request(`/orders${query ? `?${query}` : ''}`)
+    list: async () => {
+      if (USE_MOCK_DATA) return mockData.positions
+      return request('/positions')
     },
-    get: (orderId: number) => request(`/orders/${orderId}`),
-    activeCount: () => request('/orders/active/count'),
-  },
-
-  // Trades
-  trades: {
-    list: (params?: { limit?: number; offset?: number; instrument?: string }) => {
-      const query = new URLSearchParams(params as any).toString()
-      return request(`/trades${query ? `?${query}` : ''}`)
+    summary: async () => {
+      if (USE_MOCK_DATA) return mockData.positionSummary
+      return request('/positions/summary')
+    },
+    get: async (instrument: string) => {
+      if (USE_MOCK_DATA) {
+        return mockData.positions.find(p => p.instrument === instrument) || null
+      }
+      return request(`/positions/${instrument}`)
     },
   },
 
   // Risk
   risk: {
-    metrics: () => request('/risk/metrics'),
-  },
-
-  // Market Data
-  market: {
-    ticks: (instrument: string, limit = 100) =>
-      request(`/market/ticks/${instrument}?limit=${limit}`),
-    bars: (instrument: string, timeframe = '1m', limit = 500) =>
-      request(`/market/bars/${instrument}?timeframe=${timeframe}&limit=${limit}`),
-  },
-
-  // Analytics
-  analytics: {
-    daily: (instrument: string, days = 30) =>
-      request(`/analytics/daily/${instrument}?days=${days}`),
-    orb: (instrument: string, period = 30, days = 30) =>
-      request(`/analytics/orb/${instrument}?period=${period}&days=${days}`),
-    volumeProfile: (instrument: string, days = 30) =>
-      request(`/analytics/volume-profile/${instrument}?days=${days}`),
-  },
-
-  // Sentiment
-  sentiment: {
-    news: (instrument?: string, limit = 100) => {
-      const query = new URLSearchParams({
-        ...(instrument && { instrument }),
-        limit: limit.toString(),
-      }).toString()
-      return request(`/sentiment/news?${query}`)
+    metrics: async () => {
+      if (USE_MOCK_DATA) return mockData.riskMetrics
+      return request('/risk/metrics')
     },
-    series: (instrument: string, limit = 100) =>
-      request(`/sentiment/series/${instrument}?limit=${limit}`),
   },
-}
 
-export { APIError }
+  // Market
+  market: {
+    bars: async (instrument: string, timeframe = '1m', limit = 500) => {
+      if (USE_MOCK_DATA) return mockData.bars(instrument)
+      const query = new URLSearchParams({ timeframe, limit: limit.toString() })
+      return request(`/market/${instrument}/bars?${query}`)
+    },
+  },
+
+  // Trades
+  trades: {
+    list: async (params?: { limit?: number; instrument?: string }) => {
+      if (USE_MOCK_DATA) return mockData.trades
+      const query = params ? new URLSearchParams(params as any).toString() : ''
+      return request(`/trades?${query}`)
+    },
+  },
+
+  // Orders
+  orders: {
+    list: async (params?: { limit?: number; offset?: number; status?: string; instrument?: string }) => {
+      if (USE_MOCK_DATA) return mockData.orders
+      const query = params ? new URLSearchParams(params as any).toString() : ''
+      return request(`/orders?${query}`)
+    },
+    get: async (orderId: number) => {
+      if (USE_MOCK_DATA) {
+        return mockData.orders.orders.find(o => o.id === orderId.toString()) || null
+      }
+      return request(`/orders/${orderId}`)
+    },
+    activeCount: async () => {
+      if (USE_MOCK_DATA) return { count: mockData.orders.total }
+      return request('/orders/active/count')
+    },
+  },
+  }
