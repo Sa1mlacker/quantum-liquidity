@@ -16,8 +16,7 @@ npm install
 
 # Build Tauri app
 echo "⚙️ Building Tauri macOS app..."
-npm run tauri build -- --target universal-apple-darwin -- --skipTypeCheck
-# Get the app path
+npm run tauri build --target universal-apple-darwin# Get the app path
 APP_PATH="src-tauri/target/release/bundle/macos/QuantumLiquidity.app"
 
 if [ -d "$APP_PATH" ]; then
