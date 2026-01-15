@@ -60,11 +60,8 @@ async function request<T>(
   }
 }
 
-export const api = {
-  // Health
-  health: () => request('/health'),
+63
 
-  // Positions
     // Health
   health: async () => {
     if (USE_MOCK_DATA) return mockData.health
