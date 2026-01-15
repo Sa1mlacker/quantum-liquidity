@@ -50,24 +50,19 @@ export function useQuery<T>(
 
 // Specific hooks
 export function usePositions() {
-  return useQuery(() => api.positions.list(), { refetchInterval: 1000 })
-}
+  return useQuery<any>(() => api.positions.list(), { refetchInterval: 1000 })}
 
 export function usePositionSummary() {
-  return useQuery(() => api.positions.summary(), { refetchInterval: 1000 })
-}
+  return useQuery<any>(() => api.positions.summary(), { refetchInterval: 1000 })}
 
 export function useRiskMetrics() {
-  return useQuery(() => api.risk.metrics(), { refetchInterval: 1000 })
-}
+  return useQuery<any>(() => api.risk.metrics(), { refetchInterval: 1000 })}
 
 export function useTrades(params?: { limit?: number; instrument?: string }) {
-  return useQuery(() => api.trades.list(params), { refetchInterval: 5000 })
-}
+  return useQuery<any>(() => api.trades.list(params), { refetchInterval: 5000 })}
 
 export function useBars(instrument: string, timeframe = '1m', limit = 500) {
-  return useQuery(
-    () => api.market.bars(instrument, timeframe, limit),
+  return useQuery<any>(    () => api.market.bars(instrument, timeframe, limit),
     { refetchInterval: 1000 }
   )
 }
