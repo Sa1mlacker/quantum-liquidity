@@ -23,7 +23,6 @@
       "targets": "all",
       "identifier": "com.quantumliquidity.desktop",
     "icon": []        },
-    "csp": null,
     "windows": [      {
         "fullscreen": false,
         "resizable": true,
