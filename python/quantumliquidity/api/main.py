@@ -23,6 +23,7 @@ from .routes import (
     market_data,
     sentiment,
     system,
+    strategies,
 )
 from .websocket.stream import websocket_endpoint
 
@@ -136,6 +137,13 @@ app.include_router(
     risk.router,
     prefix="/api/v1/risk",
     tags=["Risk"]
+)
+
+# Strategies
+app.include_router(
+    strategies.router,
+    prefix="/api/v1/strategies",
+    tags=["Strategies"]
 )
 
 # Analytics
